@@ -93,7 +93,7 @@ module.exports = {
       .catch(err => res.json(err));
   },
 
-  // Update a user  Route '//:userId/friends/:friendId'
+  // Delete a user  Route '//:userId/friends/:friendId'
   deleteFriend(req, res) {
     //  Find a user with requested ID and update their friends list by removing the friend with requested ID
     User.findOneAndUpdate(
