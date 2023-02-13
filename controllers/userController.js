@@ -57,7 +57,21 @@ module.exports = {
           : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
-  }
+  },
+
+  // Delete a user  Route '/:userId'
+  deleteUsers(req, res) {
+    // Delete a single user in the "Users" collection based on the provided user ID.
+    Users.findOneAndDelete({_id: req.params.id})
+    .then(dbUsersData => {
+        if(!dbUsersData) {
+            res.status(404).json({message: 'No User with this particular ID!'});
+            return;
+        }
+        res.json(dbUsersData);
+    })
+    .catch(err => res.status(400).json(err));
+}
 
   };
    
