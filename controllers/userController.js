@@ -63,13 +63,11 @@ module.exports = {
   deleteUsers(req, res) {
     // Delete a single user in the "User" collection based on the provided user ID.
     User.findOneAndDelete({ _id: req.params.id })
-      .then(user => {
-        if (!user) {
-          res.status(404).json({ message: 'No User with this ID!' });
-          return;
-        }
-        res.json(user);
-      })
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No User with this ID!" })
+          : res.json(user)
+      )
       .catch(err => res.status(400).json(err));
   },
 
@@ -78,23 +76,43 @@ module.exports = {
     // Update a single user document in the "User" collection based on the provided user ID. 
     User.findOneAndUpdate(
       // Filter the query by requested id
-      { _id: params.id }, 
+      { _id: params.id },
       // Push the new friend ID to the "friends" array
-      { $push: { friends: req.params.friendId } }, 
+      { $push: { friends: req.params.friendId } },
       // Return the updated document
       { new: true })
       // Populate the "friends" field in the document with the data from the "friends" collection
       .populate({ path: 'friends', select: ('-__v') })
       // Exclude the "__v" property from the returned user document
       .select('-__v')
-      .then(user => {
-        if (!user) {
-          res.status(404).json({ message: 'No User with this ID!' });
-          return;
-        }
-        res.json(user);
-      })
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No User with this ID!" })
+          : res.json(user)
+      )
       .catch(err => res.json(err));
   },
+
+  // Update a user  Route '//:userId/friends/:friendId'
+  deleteFriend(req, res) {
+    //  Find a user with requested ID and update their friends list by removing the friend with requested ID
+    User.findOneAndUpdate(
+      // Filter the query by requested id
+      { _id: req.params.id },
+      // Remove the requested friend ID from the array
+      { $pull: { friends: req.params.friendId } },
+      // Return the updated document
+      { new: true })
+      // Populate the "friends" field in the document with the data from the "friends" collection
+      .populate({ path: 'friends', select: '-__v' })
+      // Exclude the "__v" property from the returned user document
+      .select('-__v')
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No User with this ID!" })
+          : res.json(user)
+      )
+      .catch(err => res.status(400).json(err));
+  }
 
 };
