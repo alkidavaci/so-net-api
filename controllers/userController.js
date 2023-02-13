@@ -60,7 +60,7 @@ module.exports = {
   },
 
   // Delete a user  Route '/:userId'
-  deleteUsers(req, res) {
+  deleteUser(req, res) {
     // Delete a single user in the "User" collection based on the provided user ID.
     User.findOneAndDelete({ _id: req.params.id })
       .then((user) =>
