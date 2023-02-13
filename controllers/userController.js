@@ -38,6 +38,25 @@ module.exports = {
           : res.json(user)
       )
       .catch((err) => res.status(500).json(err));
+  },
+
+  // Update a user  Route '/:userId'
+  updateUser(req, res) {
+    // Update a single user in the "User" collection based on the provided user ID
+    User.findOneAndUpdate(
+      // Filter the query by requested id
+      { _id: req.params.userId },
+      // Specify the update operation (request body)
+      { $set: req.body },
+      // Run validators on the update operation and return the updated document
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No User with this ID!" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
   }
 
   };
