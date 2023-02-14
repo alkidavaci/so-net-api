@@ -1,5 +1,6 @@
-const { connect, connection } = require('mongoose');
+const { connect, connection, mongoose } = require('mongoose');
 
+mongoose.set("strictQuery", false);
 // mongodb://127.0.0.1:27017/ is the connection URL, and the /studentsDB at the end is the name of the database.
 const connectionString =
   process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/studentsDB';
