@@ -61,8 +61,9 @@ module.exports = {
 
   // Delete a user  Route '/:userId'
   deleteUser(req, res) {
+    console.log(req.params.id)
     // Delete a single user in the "User" collection based on the provided user ID.
-    User.findOneAndDelete({ _id: req.params.id })
+    User.findOneAndDelete({ _id: req.params.userId })
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No User with this ID!" })
