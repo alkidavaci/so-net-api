@@ -8,6 +8,9 @@ module.exports = {
   getAllUser(req, res) {
     // Receive all the documents from Users
     User.find({})
+    .select("-__v")
+      .populate("friends")
+      .populate("thoughts")
       // Return data in json format
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
