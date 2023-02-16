@@ -52,7 +52,7 @@ module.exports = {
         // Update a single thought in the "thought" collection based on the provided thought ID
         Thought.findOneAndUpdate(
             // Filter the query by requested id
-            { _id: req.params.thoughtId  },
+            { _id: req.params.thoughtId },
             // Specify the update operation (request body)
             { $set: req.body },
             // Run validators on the update operation and return the updated document
@@ -84,5 +84,45 @@ module.exports = {
             )
             .catch(err => res.json(err));
     },
+
+    // Create a reaction. Route '/:thoughtId/reactions'
+    createReaction(req, res) {
+        // Update a single reaction in the "thought" collection based on the provided thought ID
+        Thought.findOneAndUpdate(
+            // Filter the query by requested id
+            { _id: req.params.thoughtId },
+            // Specify the update operation (request body)
+            { $push: { reactions: req.body } },
+            // Run validators on the update operation and return the updated document
+            { runValidators: true, new: true }
+        )
+            // Methods to populate "friend" documents
+            .populate({ path: 'reactions', select: '-__v' })
+            // Exclude the "__v" property from the returned user document
+            .select('-__v')
+            .then((thoughtData) =>
+                !thoughtData
+                    ? res.status(404).json({ message: "No thought find with this ID!" })
+                    : res.json(thoughtData)
+            )
+            .catch(err => res.json(err));
+    },
+
+    /// Delete a reaction. Route '/:thoughtId/reactions/:reactionId'
+    deleteReaction(req, res) {
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            // Remove the requested reactionId from the array
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
+            // Return the updated document
+            { new: true }
+        )
+            .then((thoughtData) =>
+                !thoughtData
+                    ? res.status(404).json({ message: "No thought find with this ID!" })
+                    : res.json(thoughtData)
+            )
+            .catch(err => res.json(err));
+    }
 
 };
