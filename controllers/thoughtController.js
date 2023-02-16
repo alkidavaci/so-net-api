@@ -27,7 +27,7 @@ module.exports = {
             })
             .then((thoughtData) =>
                 !thoughtData
-                    ? res.status(404).json({ message: "No User find with this ID!" })
+                    ? res.status(404).json({ message: "No thought find with this ID!" })
                     : res.json(thoughtData)
             )
             .catch((err) => res.status(500).json(err));
@@ -52,7 +52,7 @@ module.exports = {
         // Update a single thought in the "thought" collection based on the provided thought ID
         Thought.findOneAndUpdate(
             // Filter the query by requested id
-            { _id: req.params.id },
+            { _id: req.params.thoughtId  },
             // Specify the update operation (request body)
             { $set: req.body },
             // Run validators on the update operation and return the updated document
@@ -60,7 +60,7 @@ module.exports = {
         )
             .then((thoughtData) =>
                 !thoughtData
-                    ? res.status(404).json({ message: "No User find with this ID!" })
+                    ? res.status(404).json({ message: "No thought find with this ID!" })
                     : res.json(thoughtData)
             )
             .catch(err => res.json(err));
@@ -72,7 +72,7 @@ module.exports = {
         Thought.findOneAndDelete({ _id: req.params.thoughtId })
             .then((thoughtData) =>
                 !thoughtData
-                    ? res.status(404).json({ message: "No User find with this ID!" })
+                    ? res.status(404).json({ message: "No thought find with this ID!" })
                     : User.findOneAndUpdate(
                         // Filter the query by requested id
                         { thoughts: req.params.thoughtId },

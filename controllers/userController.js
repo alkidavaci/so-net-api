@@ -80,7 +80,7 @@ module.exports = {
     // Update a single user document in the "User" collection based on the provided user ID. 
     User.findOneAndUpdate(
       // Filter the query by requested id
-      { _id: params.id },
+      { _id: req.params.userId },
       // Push the new friend ID to the "friends" array
       { $push: { friends: req.params.friendId } },
       // Return the updated document
