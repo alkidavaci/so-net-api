@@ -48,7 +48,7 @@ module.exports = {
     },
 
     // Update a thought. Route '/:thoughtId'
-    updateThought({ req, body }, res) {
+    updateThought( req, res) {
         // Update a single thought in the "thought" collection based on the provided thought ID
         Thought.findOneAndUpdate(
             // Filter the query by requested id
@@ -69,20 +69,13 @@ module.exports = {
     // Delete a thought. Route '/:thoughtId'
     deleteThought(req, res) {
         // Delete a single thought in the "thought" collection based on the provided thought ID
-        Thought.findOneAndDelete({ _id: req.params.thoughtId })
-            .then((thoughtData) =>
-                !thoughtData
-                    ? res.status(404).json({ message: "No thought find with this ID!" })
-                    : User.findOneAndUpdate(
-                        // Filter the query by requested id
-                        { thoughts: req.params.thoughtId },
-                        // Remove the requested thought ID from the array
-                        { $pull: { thoughts: req.params.thoughtId } },
-                        // Return the updated document
-                        { new: true }
-                    )
-            )
-            .catch(err => res.json(err));
+        Thought.findOneAndDelete({_id: req.params.thoughtId})
+        .then((thoughtData) =>
+        !thoughtData
+            ? res.status(404).json({ message: "No thought find with this ID!" })
+            : res.json(thoughtData)
+    )
+    .catch(err => res.json(err));
     },
 
     // Create a reaction. Route '/:thoughtId/reactions'
