@@ -9,8 +9,8 @@ module.exports = {
     // Receive all the documents from Users
     User.find({})
     .select("-__v")
-      .populate("friends")
-      .populate("thoughts")
+    .lean().populate('friends','username')
+    .lean().populate("thoughts","thoughtText")
       // Return data in json format
       .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
@@ -30,9 +30,9 @@ module.exports = {
     // Retrieve a single user from the "User" collection
     User.findOne({ _id: req.params.userId })
       // Methods to populate "thought" documents
-      .populate("thoughts")
+      .lean().populate('friends','username')
       // Methods to populate "friend" documents
-      .populate("friends")
+      .lean().populate("thoughts","thoughtText")
       // Exclude the "__v" property from the returned user document
       .select("-__v")
       .then((user) =>
@@ -66,7 +66,7 @@ module.exports = {
   deleteUser(req, res) {
     console.log(req.params.id)
     // Delete a single user in the "User" collection based on the provided user ID.
-    User.findOneAndDelete({ _id: req.params.userId })
+    User.findOneAndDelete({ _id: req.params.userId },)
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No User with this ID!" })
@@ -102,11 +102,11 @@ module.exports = {
     //  Find a user with requested ID and update their friends list by removing the friend with requested ID
     User.findOneAndUpdate(
       // Filter the query by requested id
-      { _id: req.params.id },
+      { _id: req.params.userId },
       // Remove the requested friend ID from the array
       { $pull: { friends: req.params.friendId } },
       // Return the updated document
-      { new: true })
+      { runValidators: true,new: true })
       // Populate the "friends" field in the document with the data from the "friends" collection
       .populate({ path: 'friends', select: '-__v' })
       // Exclude the "__v" property from the returned user document
