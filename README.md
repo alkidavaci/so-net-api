@@ -37,7 +37,7 @@
     ![terminal](./assets/reaction-post-delete.png)
 
 
-  💻Walkthrough [video](https://drive.google.com/file/d/1cxyoFb5vZFAPw4ii9sAQYXPE68xKy0wX/view) 
+  💻Walkthrough [video](https://drive.google.com/file/d/1L_FbUg5q4wxACdy9GwtKal1VsIqrVlw-/view) 
     
 
   ## License 
